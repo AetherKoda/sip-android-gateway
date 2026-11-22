@@ -12,7 +12,7 @@ This history covers the Android fork. Build records, user-reported calls, and au
 - Added optimized AES-256-GCM DEX packaging and the corresponding loader/build sources. Native libraries and resources remain unencrypted; this is not protection against inspection of a running app or SIP/RTP encryption.
 - Reused the verified ARM64 PJSUA2/native payload shared with standalone.1. This release does not claim a fresh NDK rebuild or a new physical two-way call acceptance. See [testing](docs/TESTING.md) and [QR setup](docs/SIP_QR.md).
 - Updated the reported two-call trial with participant/device labels and a flowchart: call 1 remains on SIM-A; call 2 remains on SIM-B. SIM-C selection and full rotation were not demonstrated. Multi-VPS mode is listed as the next research step, not as a completed feature.
-- Added an actual GitHub Fork under AetherKoda/android-voice-sip-agent with the original author preserved; QQ-SIP releases remain in this repository.
+- Keep QQ-SIP source, documentation and APK releases in this single repository, with the original author attribution preserved.
 
 ## 0.4.0-standalone.1
 

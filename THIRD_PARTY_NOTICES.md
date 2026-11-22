@@ -2,7 +2,7 @@
 
 Voice SIP Agent is licensed under the GNU General Public License v2 or later with an Apache-2.0 linking
 exception.
-QQ-SIP / SIP通訊 is a modified Android project based on [sparkcyf/android-voice-sip-agent](https://github.com/sparkcyf/android-voice-sip-agent), copyright (C) 2026 sparkcyf. Changes include standalone SIP and QR login, Chinese UI, in-app privileged-service startup, encrypted DEX packaging, and the earlier managed platform variant. The [upstream Fork](https://github.com/AetherKoda/android-voice-sip-agent) and [release source](https://github.com/AetherKoda/sip-android-gateway) preserve attribution. This public source snapshot is dated 2026-11-23.
+QQ-SIP / SIP通訊 is a modified Android project based on [sparkcyf/android-voice-sip-agent](https://github.com/sparkcyf/android-voice-sip-agent), copyright (C) 2026 sparkcyf. Changes include standalone SIP and QR login, Chinese UI, in-app privileged-service startup, encrypted DEX packaging, and the earlier managed platform variant. [QQ-SIP source and releases](https://github.com/AetherKoda/sip-android-gateway) are maintained in this single repository with the original author attribution preserved. This public source snapshot is dated 2026-11-23.
 
 Android builds from this source use the following third-party software.
 

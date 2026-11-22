@@ -2,7 +2,7 @@
 
 Use a SIM-equipped Android phone as a cellular gateway for a SIP phone system. A SIP client such as Linphone or Bria sends an outbound call through the PBX, and the Android phone places it on the mobile network. The same bridge can carry an incoming mobile call back to the SIP system when the routing policy allows it.
 
-QQ-SIP builds on sparkcyf's [Voice SIP Agent](https://github.com/sparkcyf/android-voice-sip-agent). This repository contains the modified application and releases. Our [upstream Fork](https://github.com/AetherKoda/android-voice-sip-agent) preserves the GitHub fork relationship and links here. The standalone APK accepts SIP settings directly on the phone or from an account QR code. The earlier platform-managed build is available as a separate build variant. A compatible PBX can coordinate line selection, group ringing, and transfers across several SIM phones. Each Android handset handles one cellular call at a time.
+QQ-SIP builds on sparkcyf's [Voice SIP Agent](https://github.com/sparkcyf/android-voice-sip-agent). This is the single repository for QQ-SIP source, documentation and APK releases. The standalone APK accepts SIP settings directly on the phone or from an account QR code. The earlier platform-managed build is available as a separate build variant. A compatible PBX can coordinate line selection, group ringing, and transfers across several SIM phones. Each Android handset handles one cellular call at a time.
 
 [Development history](#development-history) · [Source review](docs/SOURCE_REVIEW.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
 
