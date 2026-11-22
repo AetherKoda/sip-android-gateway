@@ -1,0 +1,47 @@
+name: Bug report
+description: Report a problem that can be reproduced in SIP Communications.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues are public. Remove SIP credentials, phone numbers, private server addresses, and recordings from your report.
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: "For example, 0.4.0-standalone.1"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Phone model and Android version
+      placeholder: "For example, OPPO Reno10, Android 14"
+    validations:
+      required: true
+  - type: input
+    id: shizuku
+    attributes:
+      label: Shizuku version and status
+      placeholder: "For example, version number; running and authorized"
+  - type: dropdown
+    id: transport
+    attributes:
+      label: SIP transport
+      options:
+        - UDP
+        - TCP
+        - TLS
+        - Unknown or not applicable
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include what you expected and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Error message or redacted diagnostics
+      description: For audio issues, say which person could hear the other. Share only the relevant, redacted details.

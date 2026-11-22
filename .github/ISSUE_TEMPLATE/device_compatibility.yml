@@ -1,0 +1,43 @@
+name: Device compatibility
+description: Share what worked on an Android phone or report a device-specific limitation.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues are public. Share device and software versions. Remove credentials, private server addresses, phone numbers, and recordings.
+  - type: input
+    id: device
+    attributes:
+      label: Phone model and Android version
+      placeholder: "For example, vivo V60, Android 15"
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: "For example, 0.4.0-standalone.1"
+    validations:
+      required: true
+  - type: input
+    id: shizuku
+    attributes:
+      label: Shizuku version and status
+      placeholder: "For example, version number; running and authorized"
+  - type: dropdown
+    id: result
+    attributes:
+      label: Overall result
+      options:
+        - Working
+        - Partly working
+        - Not working
+    validations:
+      required: true
+  - type: textarea
+    id: call-checks
+    attributes:
+      label: What did you test?
+      description: List the checks you tried and their results, such as SIP registration, outgoing or incoming calls, and whether both people could hear each other.
+    validations:
+      required: true
