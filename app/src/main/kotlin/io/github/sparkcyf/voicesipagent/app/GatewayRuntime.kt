@@ -1000,8 +1000,9 @@ class GatewayRuntime private constructor(context: Context) {
 
     /** The master switch. Switching off mid-call waits for that call to end. */
     fun setTakeover(on: Boolean) = worker.execute {
-        if (on && !access.allowed()) {
-            _dialerMessage.value = "請先登入並完成全部權限設定。"
+        if (on && (!access.allowed() || (!BuildConfig.PLATFORM_MANAGED && !settings.sipConfigured))) {
+            _dialerMessage.value = if (BuildConfig.PLATFORM_MANAGED) "請先登入並完成全部權限設定。"
+                else "Save your SIP settings and finish phone setup first."
             return@execute
         }
         refreshRoleState()

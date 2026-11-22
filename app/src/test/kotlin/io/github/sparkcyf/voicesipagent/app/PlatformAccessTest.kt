@@ -4,6 +4,15 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class PlatformAccessTest {
+    @Test fun manualSipSetupDoesNotRequireSmsOrAPlatformSession() {
+        val ready = SetupState(true, true, true, false, false, requiresSms = false)
+        assertTrue(ready.complete)
+        assertNull(ready.next)
+        assertEquals(SetupStep.PHONE, ready.copy(phone = false).next)
+        assertTrue(canUseGateway(ready, platformManaged = false, hasPlatformSession = false))
+        assertFalse(canUseGateway(ready, platformManaged = true, hasPlatformSession = false))
+    }
+
     @Test fun incomingPolicyDefaultsToRejectAndAcceptsOnlyKnownModes() {
         assertEquals("reject", sip().applyTo(GatewaySettings()).incomingMode)
         for (mode in listOf("reject", "operator", "target")) {

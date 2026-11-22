@@ -73,14 +73,15 @@ class GatewayService : Service() {
         if (expiryJob == null) expiryJob = scope.launch {
             while (isActive) {
                 if (!GatewayAccess(this@GatewayService).allowed()) {
-                    if (SessionStore(this@GatewayService).load() == null) runtime.clearPlatformSession()
+                    if (BuildConfig.PLATFORM_MANAGED && SessionStore(this@GatewayService).load() == null)
+                        runtime.clearPlatformSession()
                     stopGateway()
                     break
                 }
                 delay(1_000)
             }
         }
-        if (sessionJob == null) sessionJob = scope.launch {
+        if (BuildConfig.PLATFORM_MANAGED && sessionJob == null) sessionJob = scope.launch {
             val store = SessionStore(this@GatewayService)
             while (isActive) {
                 val session = store.load() ?: break
@@ -114,7 +115,7 @@ class GatewayService : Service() {
 
     private fun promote(health: HealthState) {
         val nm = getSystemService(NotificationManager::class.java)
-        nm.createNotificationChannel(NotificationChannel(CHANNEL, "通話狀態", NotificationManager.IMPORTANCE_LOW))
+        nm.createNotificationChannel(NotificationChannel(CHANNEL, if (BuildConfig.PLATFORM_MANAGED) "通話狀態" else "Call status", NotificationManager.IMPORTANCE_LOW))
         if (Build.VERSION.SDK_INT >= 34) {
             startForeground(NOTIFICATION_ID, build(summary(health)), ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
         } else {
@@ -172,7 +173,18 @@ class GatewayService : Service() {
             sync(context, runtime.health.value)
         }
 
-        internal fun summary(h: HealthState): String = when {
+        internal fun summary(h: HealthState): String = if (BuildConfig.PLATFORM_MANAGED) managedSummary(h) else when {
+            h.session != null -> "Call in progress"
+            !h.takeover && h.holdsDialer -> "Gateway off; switch dialers in Android settings if needed"
+            !h.takeover -> "Gateway off"
+            h.loopbackTest -> "Loopback test"
+            h.shizuku == ShizukuConnector.State.SHIZUKU_NOT_RUNNING -> "Start Shizuku, then tap here to reconnect"
+            !h.privilegedReady -> "Waiting for Shizuku"
+            !h.sip.ready -> "Connecting to the SIP server"
+            else -> "SIP registered"
+        }
+
+        private fun managedSummary(h: HealthState): String = when {
             h.session != null -> "通話中"
             !h.takeover && h.holdsDialer -> "連線已停止，仍是預設電話 APP；可在系統設定切換。"
             !h.takeover -> "通話連線已停止"

@@ -27,6 +27,44 @@ class SipSettingsDraft : ViewModel() {
     val portError: String?
         get() = if (validatedPort == null) "Enter a port number from 1 to 65535." else null
 
+    val manualError: String?
+        get() = when {
+            !validHost(server.trim()) -> "Enter a SIP server hostname or IP address, without a URL or port."
+            portError != null -> portError
+            !validSipUser(user.trim()) -> "Enter a SIP username without a domain."
+            password.isEmpty() -> "Enter the SIP password."
+            password.any { it == '\r' || it == '\n' || it == '\u0000' } -> "The SIP password cannot contain a line break."
+            domain.isNotBlank() && !validHost(domain.trim()) -> "Enter a valid SIP domain or leave it blank."
+            target.isNotBlank() && !validSipUser(target.trim()) -> "Enter an inbound SIP extension or leave it blank."
+            else -> null
+        }
+
+    fun manualSettingsUpdate(): (GatewaySettings) -> GatewaySettings {
+        val error = manualError
+        require(error == null) { error.orEmpty() }
+        val update = settingsUpdate()
+        return { current ->
+            val submitted = update(current)
+            submitted.copy(
+                server = submitted.server.trim(),
+                username = submitted.username.trim(),
+                domain = submitted.domain.trim(),
+                inboundTarget = submitted.inboundTarget.trim(),
+                incomingMode = if (submitted.inboundTarget.isBlank()) "reject" else "target",
+                srtp = if (submitted.sipTransport == SipTransport.TLS.id) submitted.srtp else SrtpPolicy.OFF.id,
+            )
+        }
+    }
+
+    private fun validHost(value: String): Boolean = value.isNotEmpty() &&
+        runCatching {
+            val uri = java.net.URI("sip://$value")
+            uri.host != null && uri.port == -1 && uri.rawAuthority == value
+        }.getOrDefault(false)
+
+    private fun validSipUser(value: String): Boolean =
+        value.isNotEmpty() && value.none { it.isWhitespace() || it.isISOControl() || it in "@/:<>;?" }
+
     /** Follow saved or queued changes to untouched fields, while keeping unfinished edits. */
     fun syncSaved(applied: GatewaySettings, pending: GatewaySettings? = null) {
         val current = pending ?: applied

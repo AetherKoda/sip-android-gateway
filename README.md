@@ -2,7 +2,7 @@
 
 Use a SIM-equipped Android phone as a cellular gateway for a SIP phone system. A SIP client such as Linphone or Bria sends an outbound call through the PBX, and the Android phone places it on the mobile network. The same bridge can carry an incoming mobile call back to the SIP system when the routing policy allows it.
 
-SIP Communications builds on sparkcyf's [Voice SIP Agent](https://github.com/sparkcyf/android-voice-sip-agent). It adds platform-managed SIP settings and device reporting for setups with multiple SIM phones. A compatible backend and PBX coordinate line selection, group ringing, and transfers. Each Android handset handles one cellular call at a time.
+SIP Communications builds on sparkcyf's [Voice SIP Agent](https://github.com/sparkcyf/android-voice-sip-agent). The standalone APK accepts SIP settings directly on the phone. The earlier platform-managed build is available as a separate build variant. A compatible PBX can coordinate line selection, group ringing, and transfers across several SIM phones. Each Android handset handles one cellular call at a time.
 
 [Development history](#development-history) · [Source review](docs/SOURCE_REVIEW.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
 
@@ -23,18 +23,18 @@ The next step is to plan the single-app flow for pairing, permission checks, and
 
 - An ARM64 Android phone running Android 11 or later, with a SIM that supports voice calls.
 - [Shizuku](https://github.com/RikkaApps/Shizuku) installed, running, and authorized. After a reboot, start it again before using the gateway.
-- A compatible provisioning backend, a SIP PBX, and a SIP client for the calling or answering side.
+- A SIP PBX account and a SIP client for the calling or answering side.
 
-The public source baseline is `0.4.0-yx.12` (Android version code `111`). It includes the Android client and its build files. The PBX and provisioning service are separate components.
+The first public source snapshot was `0.4.0-yx.12`. The downloadable edition is `0.4.0-standalone.1`.
 
 ## Set up a handset
 
-1. Install and start Shizuku, then authorize SIP Communications. Install the gateway APK built and signed for your deployment.
-2. Use the gateway account provided by your operator. The separate SIP client uses its own SIP account.
-3. Follow the app prompts for notifications, phone access, and any required default phone or SMS roles.
-4. Enable the gateway and check Shizuku, call-audio access, background operation, and SIP registration. Place a call and check that both people can hear each other and either end can hang up.
+1. Download the signed [standalone APK](https://github.com/AetherKoda/sip-android-gateway/releases/tag/v0.4.0-standalone.1) and install it on an ARM64 Android phone.
+2. Open **SIP account**. Enter the PBX hostname, SIP username, SIP password, port, and transport. The optional SIP domain and cellular inbound extension are in **Advanced settings**.
+3. Install and start Shizuku, then authorize SIP Communications. Follow the app prompts for notifications, phone access, and the default phone role. The standalone edition does not request the SMS role.
+4. Select **Save and connect**. Wait for **SIP registered**, then place a call and check both audio directions and hang-up.
 
-Updates that replace an existing installation need the same Android package identifier and signing key. After a reboot, start Shizuku again and confirm that SIP registration has recovered.
+After every reboot, start Shizuku again. The standalone edition uses its own package identifier and signing key so it can be installed alongside the older managed app.
 
 ## Routing and configuration
 
@@ -49,11 +49,11 @@ flowchart LR
 - **Fixed line.** The PBX assigns a specific SIM handset. That handset stays busy through a transfer until the cellular call ends.
 - **Shared lines.** With the corresponding PBX policy, another idle SIM handset can carry a new call after a transfer is answered. The first handset continues to carry the original call.
 - **Group ringing.** The configured PBX controls who rings, how waiting calls queue, and when the remaining phones stop ringing after an answer.
-- **Incoming calls.** The handset follows the provisioned policy to reject the call or send it to the permitted SIP destination.
+- **Incoming calls.** The standalone handset forwards them to the SIP extension configured in the app. If the extension is blank, incoming calls are rejected while the gateway is active.
 
 | Setting | What it does |
 | --- | --- |
-| SIP provisioning | The backend supplies the SIP server settings, credentials, and transport. |
+| SIP account | Enter the server, credentials, and transport supplied by your PBX administrator. |
 | SIP transport and media | The PBX must agree with the app's transport and SRTP policy. A UDP compatibility profile can still carry unencrypted media. |
 | Outbound SIM | Use the default or select a SIM slot. The gateway handles one active cellular call per handset. |
 | Audio compatibility | The compatibility preset uses direct telephony audio and leaves handset output audible. Test handset muting separately. |
@@ -71,7 +71,7 @@ flowchart LR
 
 The readiness indicators cover setup and registration. Check actual two-way audio during a connected call. An audio peak in a single diagnostic sample can reflect sound from earlier in the call. Compare counters over an interval while both parties speak.
 
-Received SMS stays in the outbox until the expected acknowledgement arrives. MMS attachments are outside the supported flow. Keep account details and raw device logs out of public issue reports.
+The managed edition can keep received SMS in an outbox until the expected acknowledgement arrives. The standalone edition leaves SMS with the device’s current SMS app. Keep account details and raw device logs out of public issue reports.
 
 ## Device testing
 
@@ -83,10 +83,10 @@ Use JDK 17 or newer, Android SDK 37, the Android NDK required by the native scri
 
 ```bash
 ABIS=arm64-v8a APP_PLATFORM=android-30 ./sip-pjsua2/native/build-pjsua2.sh
-./gradlew :app:assembleDebug
+./gradlew :app:assembleStandaloneDebug
 ```
 
-The build produces an Android client. End-to-end use requires compatible provisioning and PBX routing. For the JVM SIP and bridge tests, run `./gradlew :sip:test :gateway:test`.
+The standalone build uses the SIP settings entered on the handset. To run the app, SIP, and bridge tests, use `./gradlew :app:testStandaloneDebugUnitTest :app:testManagedDebugUnitTest :sip:test :gateway:test`.
 
 ## Open-source components
 

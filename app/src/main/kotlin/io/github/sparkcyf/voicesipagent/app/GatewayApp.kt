@@ -9,6 +9,6 @@ class GatewayApp : Application() {
         // it the CellularEndpoint) must exist before any activity or service runs.
         GatewayRuntime.get(this).start()
         GatewayService.start(this)
-        DeviceSyncService.schedule(this)
+        if (BuildConfig.PLATFORM_MANAGED) DeviceSyncService.schedule(this)
     }
 }

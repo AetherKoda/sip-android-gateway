@@ -40,11 +40,15 @@ class GatewayServicePolicyTest {
 
     @Test fun notificationTellsUserToTapAfterRestartingShizuku() {
         val down = HealthState(takeover = true, shizuku = ShizukuConnector.State.SHIZUKU_NOT_RUNNING)
-        assertEquals("Shizuku 未啟動。啟動後點此重新連線。", GatewayService.summary(down))
+        assertEquals(if (BuildConfig.PLATFORM_MANAGED) "Shizuku 未啟動。啟動後點此重新連線。"
+            else "Start Shizuku, then tap here to reconnect", GatewayService.summary(down))
         val binding = down.copy(shizuku = ShizukuConnector.State.BINDING)
-        assertEquals("等待 Shizuku 授權與初始化", GatewayService.summary(binding))
-        assertEquals("通話連線已停止", GatewayService.summary(down.copy(takeover = false)))
-        assertEquals("通話中", GatewayService.summary(down.copy(session = "s")))
+        assertEquals(if (BuildConfig.PLATFORM_MANAGED) "等待 Shizuku 授權與初始化" else "Waiting for Shizuku",
+            GatewayService.summary(binding))
+        assertEquals(if (BuildConfig.PLATFORM_MANAGED) "通話連線已停止" else "Gateway off",
+            GatewayService.summary(down.copy(takeover = false)))
+        assertEquals(if (BuildConfig.PLATFORM_MANAGED) "通話中" else "Call in progress",
+            GatewayService.summary(down.copy(session = "s")))
     }
 
     @Test fun switchAndRoleChangesRequestServiceStopAndRestart() {

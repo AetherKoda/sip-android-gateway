@@ -15,15 +15,31 @@ android {
         targetSdk = 36
         versionCode = 111
         versionName = "0.4.0-yx.12"
-        val apiBaseUrl = providers.gradleProperty("yx.apiBaseUrl").orElse("").get()
-        require(apiBaseUrl.isEmpty() || apiBaseUrl.matches(Regex("https://[A-Za-z0-9.:-]+/?"))) {
-            "yx.apiBaseUrl must be an HTTPS origin"
-        }
-        buildConfigField("String", "API_BASE_URL", "\"${apiBaseUrl.trimEnd('/')}\"")
         // Filter all transitive JNI libraries as well as PJSIP's own module outputs.
         ndk {
             //abiFilters += listOf("arm64-v8a", "x86_64")
             abiFilters += "arm64-v8a"
+        }
+    }
+
+    val apiBaseUrl = providers.gradleProperty("yx.apiBaseUrl").orElse("").get()
+    require(apiBaseUrl.isEmpty() || apiBaseUrl.matches(Regex("https://[A-Za-z0-9.:-]+/?"))) {
+        "yx.apiBaseUrl must be an HTTPS origin"
+    }
+    flavorDimensions += "configuration"
+    productFlavors {
+        create("standalone") {
+            dimension = "configuration"
+            applicationId = "io.github.aetherkoda.sipcommunications"
+            versionName = "0.4.0-standalone.1"
+            versionCode = 1
+            buildConfigField("boolean", "PLATFORM_MANAGED", "false")
+            buildConfigField("String", "API_BASE_URL", "\"\"")
+        }
+        create("managed") {
+            dimension = "configuration"
+            buildConfigField("boolean", "PLATFORM_MANAGED", "true")
+            buildConfigField("String", "API_BASE_URL", "\"${apiBaseUrl.trimEnd('/')}\"")
         }
     }
 

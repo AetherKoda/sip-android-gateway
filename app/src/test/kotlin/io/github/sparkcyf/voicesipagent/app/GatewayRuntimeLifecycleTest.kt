@@ -365,7 +365,8 @@ class GatewayRuntimeLifecycleTest {
         assertFalse(f.runtime.health.value.takeoverOffPending)
     }
 
-    @Test fun settingsQueuedDuringCallAccumulateAndApplyTogether(): Unit = Fixture(enabled = true).use { f ->
+    @Test fun settingsQueuedDuringCallAccumulateAndApplyTogether(): Unit =
+        Fixture(enabled = true, initialAudioMethod = AudioMethod.AUTO).use { f ->
         f.connect()
         `when`(f.runtime.cellular.hasCalls).thenReturn(true)
         f.runtime.applySettings { it.copy(audioMethod = AudioMethod.LEGACY) }
@@ -513,7 +514,8 @@ class GatewayRuntimeLifecycleTest {
         }
 
     private class Fixture(enabled: Boolean = false, var holder: String? = "phone", rejectLaunch: Boolean = false,
-        holdSip: Boolean = false, healthy: Boolean = false) : AutoCloseable {
+        holdSip: Boolean = false, healthy: Boolean = false,
+        initialAudioMethod: Int = AudioMethod.LEGACY) : AutoCloseable {
         private val scopes = mutableListOf<AutoCloseable>()
         private val workerScopes = mutableListOf<AutoCloseable>()
         lateinit var connector: ShizukuConnector
@@ -578,7 +580,8 @@ class GatewayRuntimeLifecycleTest {
             }
             scopes += mockConstruction(SettingsStore::class.java) { store, _ ->
                 `when`(store.load()).thenReturn(GatewaySettings(takeover = enabled, callAccess = CallAccess.DIALER,
-                    server = "pbx.invalid", username = "test", password = "test", holdSipWhenNotReady = holdSip))
+                    server = "pbx.invalid", username = "test", password = "test", holdSipWhenNotReady = holdSip,
+                    audioMethod = initialAudioMethod))
             }
             scopes += mockConstruction(DialerHandoffStore::class.java) { store, _ ->
                 `when`(store.save(any(PreviousDialer::class.java) ?: PreviousDialer(0, ""))).thenReturn(true)

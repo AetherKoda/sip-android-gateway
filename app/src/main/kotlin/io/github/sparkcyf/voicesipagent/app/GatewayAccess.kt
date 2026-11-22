@@ -8,14 +8,14 @@ import android.content.pm.PackageManager
 import android.os.Build
 
 data class SetupState(val notifications: Boolean, val phone: Boolean, val dialer: Boolean,
-    val sms: Boolean, val smsRole: Boolean) {
-    val complete get() = notifications && phone && dialer && sms && smsRole
+    val sms: Boolean, val smsRole: Boolean, val requiresSms: Boolean = true) {
+    val complete get() = next == null
     val next: SetupStep? get() = when {
         !notifications -> SetupStep.NOTIFICATIONS
         !phone -> SetupStep.PHONE
         !dialer -> SetupStep.DIALER
-        !smsRole -> SetupStep.SMS_ROLE // Android restricted SMS grants require the default role first.
-        !sms -> SetupStep.SMS
+        requiresSms && !smsRole -> SetupStep.SMS_ROLE // Android restricted SMS grants require the default role first.
+        requiresSms && !sms -> SetupStep.SMS
         else -> null
     }
 }
@@ -24,8 +24,14 @@ enum class SetupStep(val label: String) {
     SMS("允許簡訊"), SMS_ROLE("設為預設簡訊 APP")
 }
 
+internal fun canUseGateway(setup: SetupState, platformManaged: Boolean, hasPlatformSession: Boolean): Boolean =
+    setup.complete && (!platformManaged || hasPlatformSession)
+
 class GatewayAccess(private val context: Context) {
-    fun allowed(): Boolean = SessionStore(context).load() != null && setup().complete
+    fun allowed(): Boolean {
+        val managed = BuildConfig.PLATFORM_MANAGED
+        return canUseGateway(setup(), managed, managed && SessionStore(context).load() != null)
+    }
     fun setup(): SetupState {
         fun granted(vararg permissions: String) = permissions.all {
             context.checkSelfPermission(it) == PackageManager.PERMISSION_GRANTED
@@ -35,7 +41,9 @@ class GatewayAccess(private val context: Context) {
             (Build.VERSION.SDK_INT < 33 || granted(Manifest.permission.POST_NOTIFICATIONS)) &&
                 context.getSystemService(NotificationManager::class.java).areNotificationsEnabled(),
             granted(*PHONE_PERMISSIONS), roles.isRoleHeld(RoleManager.ROLE_DIALER),
-            granted(*SMS_PERMISSIONS), roles.isRoleHeld(RoleManager.ROLE_SMS),
+            BuildConfig.PLATFORM_MANAGED && granted(*SMS_PERMISSIONS),
+            BuildConfig.PLATFORM_MANAGED && roles.isRoleHeld(RoleManager.ROLE_SMS),
+            requiresSms = BuildConfig.PLATFORM_MANAGED,
         )
     }
     companion object {

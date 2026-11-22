@@ -34,7 +34,11 @@ abstract class DialerRoleActivity : ComponentActivity() {
     }
 
     protected fun setTakeoverFromUi(on: Boolean) = afterUnlock {
-        if (on && !GatewayAccess(this).allowed()) { message("請先登入並完成手機權限設定。"); openConfiguration(); return@afterUnlock }
+        if (on && !GatewayAccess(this).allowed()) {
+            message(if (BuildConfig.PLATFORM_MANAGED) "請先登入並完成手機權限設定。" else "Finish Android phone setup first.")
+            openConfiguration()
+            return@afterUnlock
+        }
         val rt = GatewayRuntime.get(this)
         val role = getSystemService(RoleManager::class.java)
         val held = role.isRoleHeld(RoleManager.ROLE_DIALER)
@@ -50,7 +54,7 @@ abstract class DialerRoleActivity : ComponentActivity() {
 
     protected fun requestDialer() {
         afterUnlock {
-            if (SessionStore(this).load() == null) { message("請先登入再設定預設電話 APP。"); openConfiguration(); return@afterUnlock }
+            if (BuildConfig.PLATFORM_MANAGED && SessionStore(this).load() == null) { message("請先登入再設定預設電話 APP。"); openConfiguration(); return@afterUnlock }
             val role = getSystemService(RoleManager::class.java)
             when {
                 !role.isRoleAvailable(RoleManager.ROLE_DIALER) -> message("此裝置無法選擇預設電話 APP。")

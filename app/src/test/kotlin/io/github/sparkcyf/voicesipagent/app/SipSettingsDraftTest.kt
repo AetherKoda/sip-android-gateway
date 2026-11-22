@@ -7,6 +7,28 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SipSettingsDraftTest {
+    @Test fun manualSipSettingsValidateAndKeepThePasswordUntrimmed() {
+        val draft = SipSettingsDraft()
+        draft.server = "https://pbx.example.org"
+        draft.user = " extension "
+        draft.password = " pass phrase "
+        assertNotNull(draft.manualError)
+        draft.server = " pbx.example.org "
+        draft.target = " inbound "
+        assertNull(draft.manualError)
+        val result = draft.manualSettingsUpdate()(GatewaySettings(sipDebugLog = true))
+        assertEquals("pbx.example.org", result.server)
+        assertEquals("extension", result.username)
+        assertEquals(" pass phrase ", result.password)
+        assertEquals("inbound", result.inboundTarget)
+        assertEquals("target", result.incomingMode)
+        assertTrue(result.sipDebugLog)
+        draft.target = ""
+        assertEquals("reject", draft.manualSettingsUpdate()(result).incomingMode)
+        draft.port = "65536"
+        assertNotNull(draft.manualError)
+    }
+
     @Test fun invalidPortsRemainUnsavedAndCannotFallBackToADefault() {
         val saved = GatewaySettings()
         val draft = SipSettingsDraft()

@@ -2,6 +2,12 @@
 
 Test results are scoped to the version, handset, and calling setup used for each check.
 
+## Standalone APK checks
+
+For `0.4.0-standalone.1`, the standalone and managed app suites each passed 131 tests. The SIP and gateway suites passed 22 and 20 tests respectively. The checks include manual SIP input validation, deferred settings updates, and the standalone permission gate.
+
+The signed release package was checked for its ARM64 libraries, SIP account fields, Android package identifier, and 16 KiB ZIP alignment. The standalone package requests no SMS permissions. Phone installation, live PBX registration, and physical calls remain to be verified for this APK.
+
 ## Public source checks
 
 On November 23, 2026, the following JVM tests passed against the public `0.4.0-yx.12` source snapshot.

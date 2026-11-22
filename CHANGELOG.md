@@ -2,6 +2,12 @@
 
 This history covers the Android fork. Build records, user-reported calls, and automated checks are identified where evidence is available.
 
+## 0.4.0-standalone.1
+
+- Added a public Android APK with manually configured SIP credentials and PBX transport.
+- Kept the separate Shizuku startup flow. The standalone package can be installed alongside the platform-managed app.
+- Focused the standalone build on calling. It leaves the default SMS role and messages with the existing SMS app.
+
 ## 0.4.0-yx.12
 
 - Published the Android source and build files with the GPL and third-party notices.

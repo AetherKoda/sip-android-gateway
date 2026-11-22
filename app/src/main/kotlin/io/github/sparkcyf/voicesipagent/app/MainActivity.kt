@@ -77,6 +77,12 @@ class MainActivity : DialerRoleActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!BuildConfig.PLATFORM_MANAGED) {
+            startActivity(Intent(this, SipAccountActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))
+            finish()
+            return
+        }
         store = SessionStore(this)
         session = store.load()
         firstLaunch = !getPreferences(MODE_PRIVATE).getBoolean("intro_read", false)
