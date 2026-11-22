@@ -56,7 +56,7 @@ internal object CallDiagnostics {
     }
 
     fun format(s: Snapshot): String = buildString {
-        appendLine("YX 通話診斷（不含帳密、電話、地址或錄音）")
+        appendLine("QQ-SIP 通話診斷（不含帳密、電話、地址或錄音）")
         appendLine("版本=${s.version.takeIf { it.matches(Regex("[A-Za-z0-9_.-]{1,40}")) } ?: "未知"} AndroidAPI=${s.sdk}")
         appendLine("取得時間=${s.capturedAt.takeIf { it.matches(Regex("[0-9TZ:.+-]{10,40}")) } ?: "未知"}")
         appendLine("已儲存音訊模式=${method(s.savedMethod)} 揚聲器靜音=${s.savedMute}")

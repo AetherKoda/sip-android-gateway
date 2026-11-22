@@ -15,6 +15,15 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 class PjsipEndpointLifecycleTest {
+    @Test fun unknownServerAddressesRejectIncomingSources() {
+        val endpoint = endpoint()
+        val check = PjsipEndpoint::class.java.getDeclaredMethod("fromServer", String::class.java).apply { isAccessible = true }
+        assertEquals(false, check.invoke(endpoint, "192.0.2.10:5060"))
+        PjsipEndpoint::class.java.getDeclaredField("serverAddrs").apply { isAccessible = true }
+            .set(endpoint, setOf(java.net.InetAddress.getByName("192.0.2.10")))
+        assertEquals(true, check.invoke(endpoint, "192.0.2.10:5060"))
+        assertEquals(false, check.invoke(endpoint, "192.0.2.11:5060"))
+    }
     @Test fun libraryReleaseCompletionRemainsPendingAfterTheStopWaitTimesOut() {
         val entered = CountDownLatch(1)
         val release = CountDownLatch(1)

@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.os.Looper
 import io.github.sparkcyf.voicesipagent.privileged.shell.PrivilegedService
 import rikka.shizuku.Shizuku
+import io.github.sparkcyf.voicesipagent.privileged.bootstrap.LocalBootstrap
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
@@ -16,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  * after boot via wireless debugging), checks permission, binds [PrivilegedService] and reports
  * every transition so the app can re-run setup when the service (re)connects.
  */
-class ShizukuConnector(context: Context, private val log: (String) -> Unit) {
+class ShizukuConnector(context: Context, private val useEmbedded: Boolean = false, private val log: (String) -> Unit) {
     enum class State { STOPPED, SHIZUKU_NOT_RUNNING, PERMISSION_REQUIRED, PERMISSION_DENIED, BINDING, CONNECTED, ERROR }
 
     fun interface Listener {
@@ -32,8 +33,33 @@ class ShizukuConnector(context: Context, private val log: (String) -> Unit) {
     private val main = Handler(Looper.getMainLooper())
     private var generation = 0L
     private var connection: ServiceConnection? = null
+    private val embedded by lazy { LocalBootstrap.get(app) }
+    private val embeddedListener = LocalBootstrap.Listener { _, _, _ ->
+        main.post { synchronized(this) {
+            // Re-read after acquiring our monitor: an intervening stop/restart invalidates
+            // the notification's old snapshot. Lock order is always connector -> bootstrap.
+            val latest = embedded.snapshot()
+            if (started) set(when (latest.state()) {
+                LocalBootstrap.State.CONNECTED -> State.CONNECTED
+                LocalBootstrap.State.STARTING, LocalBootstrap.State.PAIRING -> State.BINDING
+                LocalBootstrap.State.ERROR -> State.ERROR
+                LocalBootstrap.State.STOPPED -> State.STOPPED
+                else -> State.SHIZUKU_NOT_RUNNING
+            }, latest.service(), latest.detail())
+        } }
+    }
 
-    private val args = Shizuku.UserServiceArgs(ComponentName(app.packageName, PrivilegedService::class.java.name))
+    private fun serviceClass(): String {
+        val protectedEntry = "io.github.sparkcyf.voicesipagent.protection.EncryptedPrivilegedService"
+        return try {
+            Class.forName(protectedEntry, false, javaClass.classLoader)
+            protectedEntry
+        } catch (_: ClassNotFoundException) {
+            PrivilegedService::class.java.name
+        }
+    }
+
+    private val args = Shizuku.UserServiceArgs(ComponentName(app.packageName, serviceClass()))
         .daemon(false)
         .processNameSuffix("shell")
         .debuggable(false)
@@ -91,6 +117,11 @@ class ShizukuConnector(context: Context, private val log: (String) -> Unit) {
         if (started) return
         started = true
         generation++
+        if (useEmbedded) {
+            embedded.addListener(embeddedListener)
+            embedded.start()
+            return
+        }
         Shizuku.addBinderDeadListener(binderDead)
         Shizuku.addRequestPermissionResultListener(permissionResult)
         Shizuku.addBinderReceivedListenerSticky(binderReceived)
@@ -99,6 +130,14 @@ class ShizukuConnector(context: Context, private val log: (String) -> Unit) {
     /** Removes this app's listeners and helper; the shared Shizuku server is left running. */
     @Synchronized
     fun stop() {
+        if (useEmbedded) {
+            started = false
+            generation++
+            embedded.removeListener(embeddedListener)
+            embedded.stop()
+            set(State.STOPPED, null, "通話服務已停止")
+            return
+        }
         if (!started && state == State.STOPPED) return
         started = false
         generation++
@@ -132,6 +171,7 @@ class ShizukuConnector(context: Context, private val log: (String) -> Unit) {
     @Synchronized
     fun requestPermission() {
         if (!started) return
+        if (useEmbedded) { embedded.start(); return }
         try {
             if (!Shizuku.pingBinder()) return set(State.SHIZUKU_NOT_RUNNING, null, "start Shizuku first")
             if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) bind()

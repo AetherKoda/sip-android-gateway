@@ -1,6 +1,18 @@
-# SIP Communications Changelog
+# QQ-SIP / SIP通訊 Changelog
 
 This history covers the Android fork. Build records, user-reported calls, and automated checks are identified where evidence is available.
+
+## 0.4.0-standalone.2 — QQ-SIP / SIP通訊
+
+- Renamed the public app to QQ-SIP (English) and SIP通訊 (Chinese). The new package is `io.github.aetherkoda.qqsip`; it installs separately from standalone.1 and the managed app. It uses an existing signing identity, not standalone.1's different signer. Keep standalone.1 installed until migration is complete.
+- Retained direct SIP domain, username and password login with no bundled PBX address or management API origin. QR scanning and pasted `qqsip://login` / credential-bearing SIP URIs import settings through the same validation and connection flow. QR content is never fetched as a website.
+- Integrated local wireless-debugging pairing and shell-UID call-service startup for Android 12+ primary users. Android 11 and secondary users retain the existing Shizuku route. The standalone app still leaves SMS roles and messages with the existing SMS app.
+- Ported the relevant private integration candidate fixes as one public revision: typed discovery keys and generations, retry/timeout handling, late-result rejection, separate screen ownership, lock-safe status notifications, nonce/UID/expiry/replay protection, transport cleanup and shell loader support. No intermediate public APK releases are implied or fabricated.
+- Reject incoming SIP sources when the configured server address cannot be resolved.
+- Added optimized AES-256-GCM DEX packaging and the corresponding loader/build sources. Native libraries and resources remain unencrypted; this is not protection against inspection of a running app or SIP/RTP encryption.
+- Reused the verified ARM64 PJSUA2/native payload shared with standalone.1. This release does not claim a fresh NDK rebuild or a new physical two-way call acceptance. See [testing](docs/TESTING.md) and [QR setup](docs/SIP_QR.md).
+- Updated the reported two-call trial with participant/device labels and a flowchart: call 1 remains on SIM-A; call 2 remains on SIM-B. SIM-C selection and full rotation were not demonstrated. Multi-VPS mode is listed as the next research step, not as a completed feature.
+- Added an actual GitHub Fork under AetherKoda/android-voice-sip-agent with the original author preserved; QQ-SIP releases remain in this repository.
 
 ## 0.4.0-standalone.1
 

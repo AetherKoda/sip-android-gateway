@@ -2,7 +2,7 @@
 
 Voice SIP Agent is licensed under the GNU General Public License v2 or later with an Apache-2.0 linking
 exception.
-SIP Communications is a modified Android project based on [sparkcyf/android-voice-sip-agent](https://github.com/sparkcyf/android-voice-sip-agent), copyright (C) 2026 sparkcyf. Changes include managed platform login, Chinese UI and integration with central call routing. This public source snapshot is dated 2026-11-23.
+QQ-SIP / SIP通訊 is a modified Android project based on [sparkcyf/android-voice-sip-agent](https://github.com/sparkcyf/android-voice-sip-agent), copyright (C) 2026 sparkcyf. Changes include standalone SIP and QR login, Chinese UI, in-app privileged-service startup, encrypted DEX packaging, and the earlier managed platform variant. The [upstream Fork](https://github.com/AetherKoda/android-voice-sip-agent) and [release source](https://github.com/AetherKoda/sip-android-gateway) preserve attribution. This public source snapshot is dated 2026-11-23.
 
 Android builds from this source use the following third-party software.
 
@@ -28,6 +28,10 @@ gives explicit permission to link pjproject with OpenSSL.
 | Shizuku API / provider (`dev.rikka.shizuku:api` and `dev.rikka.shizuku:provider`, 13.1.5) | MIT | https://github.com/RikkaApps/Shizuku-API · [license and copyright notice](LICENSES/Shizuku-API-MIT.txt) |
 | Kotlin standard library, kotlinx.coroutines | Apache-2.0 | https://github.com/JetBrains/kotlin, https://github.com/Kotlin/kotlinx.coroutines |
 | AndroidX (core, activity, Compose UI, Material 3) | Apache-2.0 | https://android.googlesource.com/platform/frameworks/support |
+| LibADB Android 3.1.1 | Apache-2.0 option of dual license | https://github.com/MuntashirAkon/libadb-android · [license declaration](LICENSES/LibADB-COPYING.txt) |
+| Conscrypt Android 2.5.3 | Apache-2.0 | https://github.com/google/conscrypt · [license](LICENSES/Conscrypt-LICENSE.txt) · [notices](LICENSES/Conscrypt-NOTICE.txt) |
+| Bouncy Castle bcpkix / bcprov / bcutil 1.81 | MIT-style Bouncy Castle license | https://github.com/bcgit/bc-java · [license](LICENSES/BouncyCastle-LICENSE.html) |
+| ZXing Android Embedded 4.3.0 / ZXing core | Apache-2.0 | https://github.com/journeyapps/zxing-android-embedded · https://github.com/zxing/zxing |
 
 The Shizuku manager and service are supplied separately by [Shizuku](https://github.com/RikkaApps/Shizuku) under its [Apache-2.0 license](https://github.com/RikkaApps/Shizuku/blob/master/LICENSE). The package metadata for [API 13.1.5](https://central.sonatype.com/artifact/dev.rikka.shizuku/api/13.1.5) and [Provider 13.1.5](https://central.sonatype.com/artifact/dev.rikka.shizuku/provider/13.1.5) identifies both libraries as MIT.
 

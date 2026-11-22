@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SIP通訊</string>
+    <string name="sip_account">SIP 帳號登入</string>
+    <string name="sip_domain">SIP 網域／伺服器</string>
+    <string name="sip_username">SIP 帳號</string>
+    <string name="sip_password">SIP 密碼</string>
+    <string name="sip_port">連接埠</string>
+    <string name="sip_transport">連線方式</string>
+    <string name="advanced">進階設定</string>
+    <string name="hide_advanced">收起進階設定</string>
+    <string name="auth_domain">SIP 身分網域（與伺服器不同時填寫）</string>
+    <string name="incoming_extension">來電轉接分機（選填）</string>
+    <string name="incoming_hint">留白時，閘道啟用期間拒接 SIM 來電。</string>
+    <string name="media_encryption">語音加密</string>
+    <string name="sip_login">登入 SIP</string>
+    <string name="scan_login">掃描 QR Code 登入</string>
+    <string name="scan_prompt">掃描 QQ-SIP 帳號 QR Code</string>
+    <string name="paste_qr">貼上 SIP QR 內容</string>
+    <string name="import_login">匯入並登入</string>
+    <string name="qr_busy">請先結束通話，再匯入其他帳號。</string>
+    <string name="qr_invalid">不是有效的 SIP 帳號 QR Code。請使用 qqsip 登入連結或含帳密的 SIP URI；不接受舊後台啟用碼或網站連結。</string>
+    <string name="saved_finish_setup">帳號已儲存。請完成手機權限及啟動通話服務，再按「登入 SIP」。</string>
+    <string name="connection">連線狀態</string>
+    <string name="call_service">通話服務</string>
+    <string name="pair_start">配對與啟動服務</string>
+    <string name="open_shizuku">開啟 Shizuku</string>
+    <string name="authorize_shizuku">允許 Shizuku 權限</string>
+    <string name="open_shizuku_error">請開啟 Shizuku，允許 SIP通訊 使用。</string>
+    <string name="phone_setup">手機權限與設定</string>
+    <string name="allow_notifications">允許通知</string>
+    <string name="allow_phone">允許電話權限</string>
+    <string name="default_phone">設為預設電話 APP</string>
+    <string name="sip_registered">SIP 已註冊</string>
+    <string name="disconnect">停止通話連線</string>
+</resources>

@@ -30,9 +30,9 @@ android {
     productFlavors {
         create("standalone") {
             dimension = "configuration"
-            applicationId = "io.github.aetherkoda.sipcommunications"
-            versionName = "0.4.0-standalone.1"
-            versionCode = 1
+            applicationId = "io.github.aetherkoda.qqsip"
+            versionName = "0.4.0-standalone.2"
+            versionCode = 2
             buildConfigField("boolean", "PLATFORM_MANAGED", "false")
             buildConfigField("String", "API_BASE_URL", "\"\"")
         }
@@ -79,6 +79,7 @@ android {
 }
 
 dependencies {
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation(project(":voice-api"))
     implementation(project(":sip"))
     implementation(project(":sip-pjsua2"))

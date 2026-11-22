@@ -4,4 +4,11 @@
     <queries>
         <package android:name="moe.shizuku.privileged.api" />
     </queries>
+    <application>
+        <activity android:name="io.github.sparkcyf.voicesipagent.privileged.bootstrap.BootstrapActivity"
+            android:exported="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <receiver android:name="io.github.sparkcyf.voicesipagent.privileged.bootstrap.BootstrapReplyReceiver" android:exported="false" />
+        <provider android:name="io.github.sparkcyf.voicesipagent.privileged.bootstrap.BootstrapProvider"
+            android:authorities="${applicationId}.localbootstrap" android:exported="true" android:permission="android.permission.DUMP" />
+    </application>
 </manifest>

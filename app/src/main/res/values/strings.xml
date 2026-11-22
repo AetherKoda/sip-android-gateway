@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SIP Communications</string>
+    <string name="app_name">QQ-SIP</string>
+    <string name="sip_account">SIP account</string>
+    <string name="sip_domain">SIP domain / server</string>
+    <string name="sip_username">SIP username</string>
+    <string name="sip_password">SIP password</string>
+    <string name="sip_port">Port</string>
+    <string name="sip_transport">Transport</string>
+    <string name="advanced">Advanced settings</string>
+    <string name="hide_advanced">Hide advanced settings</string>
+    <string name="auth_domain">SIP identity domain (if different)</string>
+    <string name="incoming_extension">Incoming SIP extension (optional)</string>
+    <string name="incoming_hint">Leave blank to reject incoming cellular calls while the gateway is active.</string>
+    <string name="media_encryption">Media encryption</string>
+    <string name="sip_login">Log in to SIP</string>
+    <string name="scan_login">Scan QR Code to log in</string>
+    <string name="scan_prompt">Scan a QQ-SIP account QR Code</string>
+    <string name="paste_qr">Paste SIP QR contents</string>
+    <string name="import_login">Import and log in</string>
+    <string name="qr_busy">Finish the current call before importing another account.</string>
+    <string name="qr_invalid">Invalid SIP account QR Code. Use a qqsip login link or a SIP URI containing credentials; managed activation and website links are not supported.</string>
+    <string name="saved_finish_setup">Account saved. Finish phone permissions and start the call service, then log in to SIP.</string>
+    <string name="connection">Connection</string>
+    <string name="call_service">Call service</string>
+    <string name="pair_start">Pair and start service</string>
+    <string name="open_shizuku">Open Shizuku</string>
+    <string name="authorize_shizuku">Authorize Shizuku</string>
+    <string name="open_shizuku_error">Open Shizuku and grant access to QQ-SIP.</string>
+    <string name="phone_setup">Android phone setup</string>
+    <string name="allow_notifications">Allow notifications</string>
+    <string name="allow_phone">Allow phone access</string>
+    <string name="default_phone">Set default phone app</string>
+    <string name="sip_registered">SIP registered</string>
+    <string name="disconnect">Disconnect gateway</string>
 </resources>

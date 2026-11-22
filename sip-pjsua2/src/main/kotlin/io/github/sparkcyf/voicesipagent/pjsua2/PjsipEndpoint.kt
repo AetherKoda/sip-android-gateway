@@ -304,7 +304,7 @@ class PjsipEndpoint(
     }
 
     private fun fromServer(src: String): Boolean {
-        if (serverAddrs.isEmpty()) return true
+        if (serverAddrs.isEmpty()) return false
         val host = src.substringBeforeLast(':').removePrefix("[").removeSuffix("]")
         val addr = runCatching { InetAddress.getByName(host) }.getOrNull() ?: return false
         return addr in serverAddrs

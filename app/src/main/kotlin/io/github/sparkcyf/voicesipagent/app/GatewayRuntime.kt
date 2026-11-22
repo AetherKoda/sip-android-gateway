@@ -122,7 +122,8 @@ class GatewayRuntime private constructor(context: Context) {
     private val _dialerMessage = MutableStateFlow("")
     val dialerMessage: StateFlow<String> = _dialerMessage
 
-    val shizuku = ShizukuConnector(app) { AppLog.i(it) }
+    val shizuku = ShizukuConnector(app, useEmbedded = !BuildConfig.PLATFORM_MANAGED &&
+        io.github.sparkcyf.voicesipagent.privileged.bootstrap.LocalBootstrap.supported()) { AppLog.i(it) }
     private fun audioFormat() = if (settings.sipStack == SipStack.PJSUA2)
         PcmFormat.WIDEBAND else PcmFormat.NARROWBAND
 
@@ -498,7 +499,9 @@ class GatewayRuntime private constructor(context: Context) {
     // A restarted Shizuku server may not push its binder to this running app until an activity
     // comes to the foreground (see AGENT.md), so tell the user how to reconnect.
     private fun shizukuProblem(state: ShizukuConnector.State) =
-        if (state == ShizukuConnector.State.SHIZUKU_NOT_RUNNING) "Shizuku not running. After starting it, open this app to reconnect"
+        if (!BuildConfig.PLATFORM_MANAGED && io.github.sparkcyf.voicesipagent.privileged.bootstrap.LocalBootstrap.supported())
+            "Call service unavailable. Open Pair and start service."
+        else if (state == ShizukuConnector.State.SHIZUKU_NOT_RUNNING) "Shizuku not running. After starting it, open this app to reconnect"
         else "Shizuku not connected"
 
     private fun updateReadiness() {
