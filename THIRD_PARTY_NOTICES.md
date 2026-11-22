@@ -2,7 +2,7 @@
 
 Voice SIP Agent is licensed under the GNU General Public License v2 or later with an Apache-2.0 linking
 exception.
-SIP通訊 is a modified Android project based on [sparkcyf/android-voice-sip-agent](https://github.com/sparkcyf/android-voice-sip-agent), copyright (C) 2026 sparkcyf. Changes include managed platform login, Chinese UI and integration with central call routing. This public source snapshot is dated 2026-11-23.
+SIP Communications is a modified Android project based on [sparkcyf/android-voice-sip-agent](https://github.com/sparkcyf/android-voice-sip-agent), copyright (C) 2026 sparkcyf. Changes include managed platform login, Chinese UI and integration with central call routing. This public source snapshot is dated 2026-11-23.
 
 Android builds from this source use the following third-party software.
 
