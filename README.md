@@ -19,6 +19,14 @@ The public version uses Shizuku API / Provider 13.1.5 to connect to the separate
 
 The next step is to plan the single-app flow for pairing, permission checks, and call-service startup, then validate it across more handsets and after a reboot. [Candidate test notes](docs/TESTING.md#single-app-startup-candidate)
 
+## Current progress
+
+| Workstream | Status |
+| --- | --- |
+| Single-app startup with Shizuku | Feasible. A separate REDMI 15C prototype completed a two-way call using its in-app startup flow. The published standalone APK still uses separately installed Shizuku. [Prototype test](docs/TESTING.md#single-app-startup-candidate) |
+| SIP setup by QR code | Planned for the public app. The goal is to scan a SIP account QR code and use those settings to connect. The current standalone APK uses manual SIP entry. |
+| Multi-SIM selection and group transfer | Reported working in a two-call trial. The first call stayed on SIM A after transfer. The second call used SIM B and stayed on SIM B when another extension answered. [Call sequence and results](docs/TESTING.md#multi-sim-and-group-transfer-trial) |
+
 ## Requirements
 
 - An ARM64 Android phone running Android 11 or later, with a SIM that supports voice calls.

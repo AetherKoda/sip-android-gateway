@@ -33,6 +33,62 @@ The separate `0.4.0-yx.15-rc1-test` candidate completed one outbound call with t
 
 Long calls, repeated calls, inbound cellular calls, reboot recovery, and other handsets remain to be checked for this candidate. [Implementation provenance](SOURCE_REVIEW.md)
 
+## Multi-SIM and group transfer trial
+
+The project owner reported the following live call test. The tested APK version was not recorded in the report. These results are listed separately from the public standalone APK checks above.
+
+### Device setup
+
+| Role | Phone |
+| --- | --- |
+| Main device | iPhone 13 |
+| Extension 1 | iPhone 13 |
+| Extension 2 | OPPO Reno15 |
+| Extension 3 | vivo 1920 |
+| SIM A | OPPO Reno10 |
+| SIM B | REDMI 15C |
+| SIM C | vivo V60 |
+
+### Call sequence
+
+```mermaid
+sequenceDiagram
+    participant Main as Main device
+    participant PBX as PBX
+    participant A as SIM A
+    participant B as SIM B
+    participant Group as SIP extensions
+
+    Main->>PBX: Dial call 1
+    PBX->>A: Place call 1 to recipient 1
+    A-->>PBX: Call 1 connected
+    Main->>PBX: Transfer call 1
+    PBX->>Group: Ring multiple extensions together
+    Group-->>PBX: Extension 1 answers call 1
+    Note over A,Group: Extension 1 and recipient 1 stay connected on SIM A
+
+    Main->>PBX: Dial call 2 while call 1 stays connected
+    PBX->>B: Place call 2 to recipient 2
+    B-->>PBX: Call 2 connected
+    Note over A,B: The two cellular calls overlap
+    Main->>PBX: Transfer call 2
+    PBX->>Group: Ring multiple extensions together
+    Group-->>PBX: Extension 3 answers call 2
+    Note over B,Group: Extension 3 and recipient 2 stay connected on SIM B
+```
+
+### Reported results
+
+| Check | Call 1 | Call 2 |
+| --- | --- | --- |
+| Cellular handset | SIM A | SIM B, selected while call 1 was active |
+| Initial call | Normal audio reported | Normal audio reported |
+| Group ringing | Multiple extensions rang together | Multiple extensions rang together |
+| Answering extension | Extension 1 | Extension 3 |
+| After transfer | Normal audio. Extension 1 and recipient 1 stayed connected through SIM A. | Normal audio. Extension 3 and recipient 2 stayed connected through SIM B. |
+
+SIM C was present in the setup. Selection was observed on SIM A and SIM B in this trial. The report covers two calls, including the overlap between them.
+
 ## Device validation checklist
 
 1. Record the app version, handset, Android build, Shizuku state, audio mode, and routing scenario. Keep account details and real telephone numbers out of shared notes.
