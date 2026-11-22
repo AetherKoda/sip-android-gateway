@@ -118,7 +118,11 @@ SIP Communications is free software under the GNU General Public License, versio
 
 ## Disclaimer
 
-**Use and operator responsibility.** This project is intended for lawful and authorized calling and testing. Operators are responsible for their own actions, call charges, and consequences. The maintainers do not authorize fraud, impersonation, harassment, unauthorized dialing, or recording without the consent required by law. To the extent permitted by applicable law, the authors, maintainers, and contributors are not liable for losses or claims arising from another party's operation or misuse of the software.
+**Operator responsibility.** If you use, configure, or operate SIP Communications, you are responsible for your actions, any call charges, and the consequences of your use.
+
+**Misuse.** SIP Communications is intended for lawful, authorized use. Fraud, impersonation, harassment, unauthorized calls, and recordings made without legally required consent are examples of misuse.
+
+**Limitation of liability.** To the extent permitted by applicable law, the authors, maintainers, and contributors assume no liability for losses or claims arising from another person's use or misuse of the software.
 
 **Availability and emergency calls.** The software is provided as is, without warranty to the extent permitted by applicable law. Calls can drop, be misrouted, or connect without audio. Use a regular phone to reach emergency services. The gateway rejects recognized emergency numbers.
 
