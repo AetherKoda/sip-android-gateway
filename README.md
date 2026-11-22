@@ -4,7 +4,20 @@ Use a SIM-equipped Android phone as a cellular gateway for a SIP phone system. A
 
 SIP Communications builds on sparkcyf's [Voice SIP Agent](https://github.com/sparkcyf/android-voice-sip-agent). It adds platform-managed SIP settings and device reporting for setups with multiple SIM phones. A compatible backend and PBX coordinate line selection, group ringing, and transfers. Each Android handset handles one cellular call at a time.
 
-[Source review](docs/SOURCE_REVIEW.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
+[Development history](#development-history) · [Source review](docs/SOURCE_REVIEW.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
+
+## Development history
+
+1. **Starting with the call bridge.** The first versions adapted Voice SIP Agent for centrally managed handsets. The Android gateway gained a localized setup flow and received its SIP settings from the platform, so each SIM phone could be prepared without entering its SIP configuration by hand.
+2. **Getting handsets ready.** Early changes made it possible to retry Android permission requests, reconnect from the home screen, and see Shizuku readiness separately from the platform session. Session renewal was later added for handsets that stay online.
+3. **Working through call and audio issues.** Early device calls confirmed two-way audio, hang-up, and in-call keypad tones in the setups tested. Reports of one-way audio led to separate counters for each direction and a direct-telephony audio preset. The preset leaves the handset speaker or earpiece audible, so local muting is a separate test.
+4. **Operating multiple SIM phones.** The Android client added readiness and call-event reporting, and retained received SMS locally until the server acknowledged it. The platform and PBX handle fixed and shared lines, group ringing, and transfers. The public source snapshot also passed 42 SIP and gateway tests. [Changelog](CHANGELOG.md) · [Device and automated test notes](docs/TESTING.md)
+
+### Preparing for Shizuku integration
+
+The public version uses Shizuku API / Provider 13.1.5 to connect to the separately installed Shizuku service. To explore a simpler setup, a separate prototype tried starting the call service inside the gateway, using LibADB Android, Conscrypt, and Bouncy Castle while retaining the Shizuku connection path. It completed one two-way call on a REDMI 15C.
+
+The next step is to plan the single-app flow for pairing, permission checks, and call-service startup, then validate it across more handsets and after a reboot. [Candidate test notes](docs/TESTING.md#single-app-startup-candidate)
 
 ## Requirements
 
@@ -66,7 +79,7 @@ Physical call tests were reported successful on **OPPO Reno10**, **OPPO Reno15**
 
 ## Build from source
 
-Use JDK 17 or newer, Android SDK 37, the Android NDK required by the native script, SWIG, and the native build tools. Generate the ARM64 PJSUA2 bindings before assembling the app.
+Use JDK 17 or newer, Android SDK 37, the Android NDK required by the native script, SWIG, and the native build tools. Generate the ARM64 PJSUA2 bindings before assembling the app. This project uses the upstream build flow and targets ARM64 in its Android configuration. [Upstream build instructions](https://github.com/sparkcyf/android-voice-sip-agent/blob/2e2c46ccaeda1aa2e2c129d42b4084b5a0a45a13/README.md#building-from-source)
 
 ```bash
 ABIS=arm64-v8a APP_PLATFORM=android-30 ./sip-pjsua2/native/build-pjsua2.sh
@@ -74,12 +87,6 @@ ABIS=arm64-v8a APP_PLATFORM=android-30 ./sip-pjsua2/native/build-pjsua2.sh
 ```
 
 The build produces an Android client. End-to-end use requires compatible provisioning and PBX routing. For the JVM SIP and bridge tests, run `./gradlew :sip:test :gateway:test`.
-
-## Shizuku integration
-
-The current source uses [Shizuku API / Provider 13.1.5](https://github.com/RikkaApps/Shizuku-API) to connect to the separately installed [Shizuku](https://github.com/RikkaApps/Shizuku) service.
-
-The next step is to put pairing, permission checks, and call-service startup into a single app flow. A separate candidate already used its own startup flow with LibADB Android, Conscrypt, and Bouncy Castle while retaining the Shizuku connection path. It completed one two-way call on a REDMI 15C. Reboot recovery, incoming calls, and more handsets still need validation for that candidate. [Candidate test notes](docs/TESTING.md#single-app-startup-candidate)
 
 ## Open-source components
 
