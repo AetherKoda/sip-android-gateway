@@ -154,14 +154,20 @@ SIP Communications is free software under the GNU General Public License, versio
 
 ## Disclaimer
 
-**Operator responsibility.** If you use, configure, or operate SIP Communications, you are responsible for your actions, any call charges, and the consequences of your use.
+**免責聲明**
 
-**Misuse.** SIP Communications is intended for lawful, authorized use. Fraud, impersonation, harassment, unauthorized calls, and recordings made without legally required consent are examples of misuse.
+在適用法律允許的最大範圍內，本軟體（QQ-SIP／SIP通訊）以「現況」提供，不提供任何形式的明示或暗示保證，包括但不限於適銷性、特定用途適用性及不侵權保證。您需自行評估並承擔使用、設定及操作本軟體的風險。
 
-**Limitation of liability.** To the extent permitted by applicable law, the authors, maintainers, and contributors assume no liability for losses or claims arising from another person's use or misuse of the software.
+除適用法律另有規定或另有書面約定外，在適用法律允許的最大範圍內，作者、版權所有者、維護者及貢獻者均不對因本軟體、其使用、無法使用或相關交易而產生的任何索賠、損害或其他責任承擔責任，無論該責任係基於合約、侵權或其他原因。
 
-**Availability and emergency calls.** The software is provided as is, without warranty to the extent permitted by applicable law. Calls can drop, be misrouted, or connect without audio. Use a regular phone to reach emergency services. The gateway rejects recognized emergency numbers.
+尤其請注意：
 
-**Deployment.** Protect SIP credentials and PBX access, and restrict outbound dialing to the destinations your setup requires. Your carrier may charge for calls placed through the SIM. Follow local laws, carrier terms, and applicable consent requirements for call forwarding or recording. Shizuku grants shell-level privileges, so install it and the gateway from sources you trust.
+- **此閘道不適用於緊急呼叫。** 程式會拒絕撥打 Android 系統辨識的緊急號碼，辨識過程發生錯誤時也會拒絕撥打；這不代表能保證辨識所有國家、地區或情境的緊急號碼。請勿依賴此閘道或執行此閘道的電話聯絡緊急服務，應另備可直接聯絡緊急服務的通訊方式。
+- **通話可能失敗。** 通話可能中斷、被拒接、轉接錯誤或接通後無聲；作業系統更新、裝置差異或網路狀況也可能使應用程式崩潰或無法運作。請自行評估漏接、通話失敗及其後果，並準備必要的備援通訊方式。
+- **費用。** 透過閘道撥打的電話可能依您的電信方案產生費用，相關費用由您自行負擔。請在 PBX 設定適當的撥出前綴、目的地與權限限制，並確保 PBX 安全；若 PBX 或 SIP 憑證遭入侵或盜用，可能產生未授權通話及高額費用。
+- **法律和服務條款。** 轉接、錄音或攔截通話，以及將行動線路連接至 PBX，可能受到所在地法律或電信業者服務條款的限制。您有責任遵守適用規定，並取得通話各方依法所需的同意。本軟體僅供合法且經授權的用途使用。
+- **安全提示。** 透過內建無線偵錯啟動或 Shizuku，通話服務可取得 shell 等級權限。請僅安裝您信任的版本，妥善保護 SIP 憑證、PBX 及無線偵錯配對權限，並避免在不受信任的網路開放相關服務。
 
-These notices do not alter the rights and obligations in the GPL. SIP Communications is not affiliated with or endorsed by Google, Motorola, Shizuku, PJSIP, Asterisk, Flexisip, or any carrier.
+本專案與 Google、Motorola（摩托羅拉）、Shizuku、PJSIP、Asterisk、Flexisip 或任何電信業者均無關聯，亦未獲得其認可。
+
+本聲明不變更適用開源授權（包括 GPL）的權利與義務，亦不排除或限制適用法律不允許排除或限制的責任。原作者署名、授權條款及第三方聲明仍適用，請參閱 [LICENSE](LICENSE) 與 [第三方聲明](THIRD_PARTY_NOTICES.md)。
